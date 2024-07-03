@@ -21,6 +21,7 @@ export const addProduct = expressAsyncHandler(async(req,res)=>{
             category,
             quantity,
             brand,
+            countInStock
         }= req.body;
 
         //validations
@@ -37,6 +38,8 @@ export const addProduct = expressAsyncHandler(async(req,res)=>{
                 return res.status(400).json({message:"Quantity is required"})
             case !brand:
                 return res.status(400).json({message:"Brand is required"})
+            case !countInStock:
+                return res.status(400).json({message:"CountInStock is required"})
         }
 
         let imageUrl;
@@ -66,7 +69,8 @@ export const updateProductDetails=expressAsyncHandler(async(req,res)=>{
             price,
             category,
             quantity,
-            brand
+            brand,
+            countInStock
         }= req.body;
 
         //validations
@@ -83,6 +87,8 @@ export const updateProductDetails=expressAsyncHandler(async(req,res)=>{
                 return res.status(400).json({message:"Quantity is required"})
             case !brand:
                 return res.status(400).json({message:"Brand is required"})
+            case !countInStock:
+                return res.status(400).json({message:"CountInStock is required"})
         }
         const product =await Product.findByIdAndUpdate(req.params.id);
 
@@ -99,6 +105,7 @@ export const updateProductDetails=expressAsyncHandler(async(req,res)=>{
         product.category = category;
         product.quantity = quantity;
         product.brand = brand;
+        product.countInStock = countInStock;
   
         await product.save();
         res.json(product)
@@ -227,3 +234,18 @@ export const fetchNewProducts=expressAsyncHandler(async(req,res)=>{
     }
 })
 
+export const filterProducts = expressAsyncHandler(async (req, res) => {
+    try {
+      const { checked, radio } = req.body;
+  
+      let args = {};
+      if (checked.length > 0) args.category = checked;
+      if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+  
+      const products = await Product.find(args);
+      res.json(products);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Server Error" });
+    }
+});

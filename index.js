@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors"
 import cookieParser from 'cookie-parser';
 import connectDB from'./config/index.js'
-import path from 'path'
 import {v2 as cloudinary} from 'cloudinary';
 
 const app=express()
