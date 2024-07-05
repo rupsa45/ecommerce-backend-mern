@@ -41,6 +41,11 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+app.get("/api/config/paypal",(req,res)=>{
+    res.send({clientId: process.env.PAYPAL_CLIENT_ID })
+})
+
+
 import userRouters from './routes/user.routes.js'
 app.use("/api/users",userRouters);
 
@@ -49,3 +54,6 @@ app.use("/api/category",categoryRoutes);
 
 import prouductRoutes from './routes/product.routes.js'
 app.use("/api/products",prouductRoutes)
+
+import orderRoutes from './routes/order.routes.js';
+app.use("/api/orders",orderRoutes);
